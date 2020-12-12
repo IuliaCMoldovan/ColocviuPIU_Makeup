@@ -6,7 +6,8 @@ data class Product(
     var nume: String,
     var brand: String,
     var descriere: String,
-    var pret: Double,
-    var categorie: String
+    var pret: String,
+    var categorie: String,
+    var imagine: Int
 
 ) : Serializable
