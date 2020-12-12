@@ -6,10 +6,12 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.iterator
+import kotlinx.android.synthetic.main.activity_main.*
 
 
 /* implementeaza interfata deoarece e nevoie sa se schimbe lista de elemente afisate, cand se
@@ -27,31 +29,38 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         return true
     }
 
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         when (item.itemId) {
             R.id.nav_parfum -> {
                 Toast.makeText(this, "Parfumuri", Toast.LENGTH_SHORT).show()
                 currentCategory = "Parfum"
-                invalidateOptionsMenu()
             }
             R.id.nav_ruj -> {
                 Toast.makeText(this, "Rujuri", Toast.LENGTH_SHORT).show()
                 currentCategory = "Ruj"
-                invalidateOptionsMenu()
             }
             R.id.nav_eyeliner -> {
                 Toast.makeText(this, "Eyeline-uri", Toast.LENGTH_SHORT).show()
                 currentCategory = "Eyeliner"
-                invalidateOptionsMenu()
             }
             R.id.nav_blush -> {
                 Toast.makeText(this, "Blush-uri", Toast.LENGTH_SHORT).show()
                 currentCategory = "Blush"
-                invalidateOptionsMenu()
             }
+
         }
+
+        emptyPage.visibility = View.GONE
+        invalidateOptionsMenu()
+        showProducts(currentCategory)
+
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun showProducts(category: String) {
+
     }
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
@@ -95,5 +104,37 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                 "NU",
                 DialogInterface.OnClickListener { dialog, id -> dialog.cancel() })
         builder.create().show()
+    }
+
+    private fun doOperation() {
+        // if adauga la favorite
+        Toast.makeText(applicationContext, "Adaugat la favorite!", Toast.LENGTH_SHORT).show();
+
+        // if sterge de la favorite
+        Toast.makeText(applicationContext, "Sters de la favorite!", Toast.LENGTH_SHORT).show();
+
+        // if sterge element din lista
+        Toast.makeText(applicationContext, "Element sters!", Toast.LENGTH_SHORT).show();
+    }
+
+    // daca se apasa "DA", atunci doar ulterior verific ce operatie se doreste sa se efectueze
+    val daBtnClick = { dialog: DialogInterface, which: Int ->
+        doOperation()
+    }
+    val nuBtnClick = { dialog: DialogInterface, which: Int ->
+        Toast.makeText(applicationContext, "Operatie anulata", Toast.LENGTH_SHORT).show()
+        dialog.cancel()
+    }
+
+    fun basicAlert(view: View) {
+        val builder = AlertDialog.Builder(this)
+        with(builder)
+        {
+            setTitle("Efectuare operatie")
+            setMessage("Sunteti sigur?")
+            setPositiveButton("DA", DialogInterface.OnClickListener(function = daBtnClick))
+            setNegativeButton("NU", DialogInterface.OnClickListener(function = nuBtnClick))
+            show()
+        }
     }
 }
