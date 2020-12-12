@@ -6,7 +6,6 @@ import android.os.Handler
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.view.WindowManager
 import android.widget.AdapterView
 import android.widget.ListView
 import android.widget.Toast
@@ -16,9 +15,6 @@ import androidx.core.view.iterator
 import kotlinx.android.synthetic.main.activity_main.*
 import piu.colocviu.makeup.adapter.ProductAdapter
 import piu.colocviu.makeup.model.Product
-import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.concurrent.schedule
 
 
 /* implementeaza interfata deoarece e nevoie sa se schimbe lista de elemente afisate, cand se
@@ -128,17 +124,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     private fun showProducts(category: String) {
         progressBar.visibility = View.VISIBLE;
 
-        //val intent = Intent(this, ProductActivity::class.java)
-
-        /*
-        // disable-uiesc toate butoanele si orice din pagina, cat timp se incarca produsele (cat timp apare ProgressBar-ul pe ecran)
-        getWindow().setFlags(
-            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
-        );*/
-
         // las sa se invarta atata timp ProgressBar-u pana sa il fac invizibil
-
         Handler(mainLooper).postDelayed({
             progressBar.visibility = View.GONE;
             // trebuie facuta vizibila, dupa acea prima data cand nu se afiseaza nimic
@@ -154,8 +140,6 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
             productAdapter.notifyDataSetChanged()
             listView.adapter = productAdapter
-
-            //startActivity(intent);
         }, 3000)
     }
 
@@ -233,31 +217,4 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             show()
         }
     }
-
-
-    /*val language = arrayOf<String>("C","C++","Java",".Net","Kotlin","Ruby","Rails","Python","Java Script","Php","Ajax","Perl","Hadoop")
-    val description = arrayOf<String>(
-        "C programming is considered as the base for other programming languages",
-        "C++ is an object-oriented programming language.",
-        "Java is a programming language and a platform.",
-        ".NET is a framework which is used to develop software applications.",
-        "Kotlin is a open-source programming language, used to develop Android apps and much more.",
-        "Ruby is an open-source and fully object-oriented programming language.",
-        "Ruby on Rails is a server-side web application development framework written in Ruby language.",
-        "Python is interpreted scripting  and object-oriented programming language.",
-        "JavaScript is an object-based scripting language.",
-        "PHP is an interpreted language, i.e., there is no need for compilation.",
-        "AJAX allows you to send and receive data asynchronously without reloading the web page.",
-        "Perl is a cross-platform environment used to create network and server-side applications.",
-        "Hadoop is an open source framework from Apache written in Java."
-    )
-
-    val imageId = arrayOf<Int>(
-        R.drawable.c_image,R.drawable.cpp_image,R.drawable.java_image,
-        R.drawable.net_image,R.drawable.kotlin_image,R.drawable.ruby_image,
-        R.drawable.rails_image,R.drawable.python_image,R.drawable.js_image,
-        R.drawable.php_image,R.drawable.ajax_image,R.drawable.python_image,
-        R.drawable.hadoop_image
-    )*/
-
 }

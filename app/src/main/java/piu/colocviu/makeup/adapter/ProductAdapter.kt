@@ -22,20 +22,23 @@ class ProductAdapter(var context: Context, var products: ArrayList<Product>) : B
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        var view: View?
-        var viewHolder: ViewHolder
+        val view: View?
+        val viewHolder: ViewHolder
 
+        // daca inca nu am pentru view-ul asta, atunci creez unu pe baza la produsele existente
         if (convertView == null) {
-            var layout = LayoutInflater.from(context)
+            val layout = LayoutInflater.from(context)
             view = layout.inflate(R.layout.product_list, parent, false)
             viewHolder = ViewHolder(view)
             view.tag = viewHolder
         } else {
+            // daca am deja, atunci doar fac corespondenta intre tag
             view = convertView
             viewHolder = view.tag as ViewHolder
         }
 
-        var produs: Product = getItem(position) as Product
+        // imi atribui dinamic valorile la produs
+        val produs: Product = getItem(position) as Product
         viewHolder.nume.text = produs.nume
         viewHolder.brand.text = produs.brand
         viewHolder.descriere.text = produs.descriere
@@ -43,24 +46,11 @@ class ProductAdapter(var context: Context, var products: ArrayList<Product>) : B
         viewHolder.categorie.text = produs.categorie
         viewHolder.imagine.setImageResource(produs.imagine)
 
-
         return view as View
-        /*val inflater = context.layoutInflater
-        val rowView = inflater.inflate(R.layout.product_list, null, true)
-
-        val titleText = rowView.findViewById(R.id.title) as TextView
-        val imageView = rowView.findViewById(R.id.icon) as ImageView
-        val subtitleText = rowView.findViewById(R.id.description) as TextView
-
-        titleText.text = title[position]
-        imageView.setImageResource(imgid[position])
-        subtitleText.text = description[position]
-
-        return rowView*/
     }
 
     override fun getItem(position: Int): Any {
-        return products.get(position)
+        return products[position]
     }
 
     override fun getItemId(position: Int): Long {
