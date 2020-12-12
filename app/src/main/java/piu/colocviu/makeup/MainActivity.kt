@@ -2,26 +2,84 @@ package piu.colocviu.makeup
 
 import android.content.DialogInterface
 import android.os.Bundle
+import android.os.Handler
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.WindowManager
 import android.widget.AdapterView
+import android.widget.ListView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.iterator
 import kotlinx.android.synthetic.main.activity_main.*
+import piu.colocviu.makeup.adapter.ProductAdapter
+import piu.colocviu.makeup.model.Product
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.concurrent.schedule
 
 
 /* implementeaza interfata deoarece e nevoie sa se schimbe lista de elemente afisate, cand se
     schimba elementul selectat */
 class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     var currentCategory = "none"
+    val productList: ArrayList<Product> = ArrayList()
+    val listedProducts: ArrayList<Product> = ArrayList()
+    lateinit var productAdapter: ProductAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        listView.visibility = View.GONE
+        progressBar.visibility = View.GONE
+
+        val listView = findViewById<ListView>(R.id.listView)
+
+        productList.add(
+            Product(
+                "Eyeliner 1",
+                "Brand 1",
+                "Descriere 1",
+                "12.1 lei",
+                "eyeliner",
+                R.drawable.eyeliner_1
+            )
+        )
+        productList.add(
+            Product(
+                "Eyeliner 2",
+                "Brand 2",
+                "Descriere 2",
+                "12.1 lei",
+                "eyeliner",
+                R.drawable.eyeliner_2
+            )
+        )
+        productList.add(
+            Product(
+                "Blush 1",
+                "Brand 3",
+                "Descriere 3",
+                "12.1 lei",
+                "blush",
+                R.drawable.blush_1
+            )
+        )
+        productList.add(
+            Product(
+                "Blush 1",
+                "Brand 4",
+                "Descriere 4",
+                "12.1 lei",
+                "blush",
+                R.drawable.blush_2
+            )
+        )
+        productAdapter = ProductAdapter(applicationContext, listedProducts)
+        listView.adapter = productAdapter
 
         /* val myListAdapter = ProductAdapter(this,language,description,imageId)
          listView.adapter = myListAdapter
@@ -38,27 +96,26 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         return true
     }
 
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
 
         when (item.itemId) {
             R.id.nav_parfum -> {
                 Toast.makeText(this, "Parfumuri", Toast.LENGTH_SHORT).show()
-                currentCategory = "Parfum"
+                currentCategory = "parfum"
             }
             R.id.nav_ruj -> {
                 Toast.makeText(this, "Rujuri", Toast.LENGTH_SHORT).show()
-                currentCategory = "Ruj"
+                currentCategory = "ruj"
             }
             R.id.nav_eyeliner -> {
                 Toast.makeText(this, "Eyeline-uri", Toast.LENGTH_SHORT).show()
-                currentCategory = "Eyeliner"
+                currentCategory = "eyeliner"
             }
             R.id.nav_blush -> {
                 Toast.makeText(this, "Blush-uri", Toast.LENGTH_SHORT).show()
-                currentCategory = "Blush"
+                currentCategory = "blush"
             }
-
         }
 
         emptyPage.visibility = View.GONE
@@ -69,7 +126,37 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     }
 
     private fun showProducts(category: String) {
+        progressBar.visibility = View.VISIBLE;
 
+        //val intent = Intent(this, ProductActivity::class.java)
+
+        /*
+        // disable-uiesc toate butoanele si orice din pagina, cat timp se incarca produsele (cat timp apare ProgressBar-ul pe ecran)
+        getWindow().setFlags(
+            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+        );*/
+
+        // las sa se invarta atata timp ProgressBar-u pana sa il fac invizibil
+
+        Handler(mainLooper).postDelayed({
+            progressBar.visibility = View.GONE;
+            // trebuie facuta vizibila, dupa acea prima data cand nu se afiseaza nimic
+            listView.visibility = View.VISIBLE
+
+            // acum filtram dupa produsele din categoria selectata
+            listedProducts.clear()
+            for (p in productList) {
+                if (p.categorie.compareTo(category) == 0) {
+                    listedProducts.add(p)
+                }
+            }
+
+            productAdapter.notifyDataSetChanged()
+            listView.adapter = productAdapter
+
+            //startActivity(intent);
+        }, 3000)
     }
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
