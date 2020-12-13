@@ -11,8 +11,8 @@ class ProductActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val listView = findViewById<ListView>(R.id.listView)
-        val productList: ArrayList<Product> = ArrayList()
+        var listView = findViewById(R.id.listView) as ListView
+        var productList: ArrayList<Product> = ArrayList()
 
         productList.add(
             Product(
