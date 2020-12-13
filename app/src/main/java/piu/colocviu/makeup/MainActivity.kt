@@ -9,13 +9,13 @@ import android.view.ContextMenu.ContextMenuInfo
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.AdapterView
-import android.widget.ListView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.iterator
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.product_list.*
 import piu.colocviu.makeup.adapter.ProductAdapter
 import piu.colocviu.makeup.model.Product
 
@@ -25,6 +25,8 @@ import piu.colocviu.makeup.model.Product
 class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     var currentCategory = "none"
     val productList: ArrayList<Product> = ArrayList()
+    var favoriteList: ArrayList<Product> = ArrayList()
+    var almostList: ArrayList<Product> = ArrayList()
     val listedProducts: ArrayList<Product> = ArrayList()
     lateinit var productAdapter: ProductAdapter
 
@@ -40,22 +42,42 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
         val listView = findViewById<ListView>(R.id.listView)
 
-        productList.add(Product("Eyeliner 1", "Brand 1", "Descriere 1", "12.1 lei", "eyeliner", R.drawable.eyeliner_1))
-        productList.add(Product("Eyeliner 2", "Brand 2", "Descriere 2", "12.1 lei", "eyeliner", R.drawable.eyeliner_2))
-        productList.add(Product("Blush 1", "Brand 3", "Descriere 3", "12.1 lei", "blush", R.drawable.blush_1))
-        productList.add(Product("Blush 1", "Brand 4", "Descriere 4", "12.1 lei", "blush", R.drawable.blush_2))
+        productList.add(Product("Eyeliner 1", "Brand 1", "Descriere 1", "12.1 lei", "eyeliner", R.drawable.eyeliner_1, android.R.drawable.star_big_on, android.R.drawable.ic_dialog_alert))
+        productList.add(Product("Eyeliner 2", "Brand 2", "Descriere 2", "12.1 lei", "eyeliner", R.drawable.eyeliner_2, android.R.drawable.star_big_on, android.R.drawable.ic_dialog_alert))
+        productList.add(Product("Blush 1", "Brand 3", "Descriere 3", "12.1 lei", "blush", R.drawable.blush_1, android.R.drawable.star_big_on, android.R.drawable.ic_dialog_alert))
+        productList.add(Product("Blush 2", "Brand 4", "Descriere 4", "12.1 lei", "blush", R.drawable.blush_2, android.R.drawable.star_big_on, android.R.drawable.ic_dialog_alert))
+        productList.add(Product("Blush 3", "Brand 5", "Descriere 5", "12.1 lei", "blush", R.drawable.blush_3, android.R.drawable.star_big_on, android.R.drawable.ic_dialog_alert))
+        productList.add(Product("Blush 4", "Brand 6", "Descriere 6", "12.1 lei", "blush", R.drawable.blush_4, android.R.drawable.star_big_on, android.R.drawable.ic_dialog_alert))
+        productList.add(Product("Lipstick 1", "Brand 7", "Descriere 7", "12.1 lei", "lipstick", R.drawable.lipstick_1, android.R.drawable.star_big_on, android.R.drawable.ic_dialog_alert))
+        productList.add(Product("Lipstick 2", "Brand 8", "Descriere 8", "12.1 lei", "lipstick", R.drawable.lipstick_2, android.R.drawable.star_big_on, android.R.drawable.ic_dialog_alert))
+        productList.add(Product("Lipstick 3", "Brand 9", "Descriere 9", "12.1 lei", "lipstick", R.drawable.lipstick_3, android.R.drawable.star_big_on, android.R.drawable.ic_dialog_alert))
+        productList.add(Product("Lipstick 4", "Brand 10", "Descriere 10", "12.1 lei", "lipstick", R.drawable.lipstick_4, android.R.drawable.star_big_on, android.R.drawable.ic_dialog_alert))
+        productList.add(Product("Foundation 1", "Brand 11", "Descriere 11", "12.1 lei", "foundation", R.drawable.foundation_1, android.R.drawable.star_big_on, android.R.drawable.ic_dialog_alert))
+        productList.add(Product("Foundation 2", "Brand 12", "Descriere 12", "12.1 lei", "foundation", R.drawable.foundation_2, android.R.drawable.star_big_on, android.R.drawable.ic_dialog_alert))
+        productList.add(Product("Foundation 3", "Brand 13", "Descriere 13", "12.1 lei", "foundation", R.drawable.foundation_3, android.R.drawable.star_big_on, android.R.drawable.ic_dialog_alert))
+        productList.add(Product("Foundation 4", "Brand 14", "Descriere 14", "12.1 lei", "foundation", R.drawable.foundation_4, android.R.drawable.star_big_on, android.R.drawable.ic_dialog_alert))
+        productList.add(Product("Eyeliner 3", "Brand 15", "Descriere 15", "12.1 lei", "eyeliner", R.drawable.eyeliner_3, android.R.drawable.star_big_on, android.R.drawable.ic_dialog_alert))
+        productList.add(Product("Eyeliner 4", "Brand 16", "Descriere 16", "12.1 lei", "eyeliner", R.drawable.eyeliner_4, android.R.drawable.star_big_on, android.R.drawable.ic_dialog_alert))
 
-        productAdapter = ProductAdapter(applicationContext, listedProducts)
+        productAdapter = ProductAdapter(applicationContext, listedProducts, favoriteList, almostList)
         listView.adapter = productAdapter
-        
-        /* val myListAdapter = ProductAdapter(this,language,description,imageId)
-         listView.adapter = myListAdapter
 
-         listView.setOnItemClickListener(){adapterView, view, position, id ->
-             val itemAtPos = adapterView.getItemAtPosition(position)
-             val itemIdAtPos = adapterView.getItemIdAtPosition(position)
-             Toast.makeText(this, "Click on item at $itemAtPos its item id $itemIdAtPos", Toast.LENGTH_LONG).show()
-         }*/
+        // functionalitatea de long press, ca sa stergem un element
+        /*listView.onItemLongClickListener =
+            OnItemLongClickListener { parent, view, position, id ->
+                AlertDialog.Builder(this@MainActivity)
+                    .setIcon(android.R.drawable.ic_delete)
+                    .setTitle("Sigur?")
+                    .setMessage("Vrei ")
+                    .setPositiveButton("DA"
+                    ) { dialog, which ->
+                        productList.removeAt(position)
+                        productAdapter.notifyDataSetChanged()
+                    }
+                    .setNegativeButton("NU", null)
+                    .show()
+                true
+            }*/
     }
 
     // la meniu asta contextual, ii dau layout-u pe care l-am creat in operations_menu
@@ -71,41 +93,133 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
     // cand e selectat un buton din meniul contextual, o sa fac cateva operatii
     override fun onContextItemSelected(item: MenuItem): Boolean {
+        val menuInfo: AdapterView.AdapterContextMenuInfo = item.menuInfo as AdapterView.AdapterContextMenuInfo
 
          when (item.itemId) {
+             // ADD LA FAVORITE
             R.id.add_to_fav -> {
-                Toast.makeText(this, "Adaugat la favorite", Toast.LENGTH_SHORT).show()
+                AlertDialog.Builder(this)
+                    .setTitle("Adauga favorit")
+                    .setMessage("Doriti sa adaugati la favorite?")
+                    .setPositiveButton(
+                        "DA"
+                    ) { dialog, which ->
+                        // adaug la final in lista de favorite, elementul care in lista afisata se gaseste la pozitia meuInfo.position
 
-                return true
+                        if (favoriteList.contains(listedProducts[menuInfo.position])) {
+                            Toast.makeText(this, "Exista deja la favorite", Toast.LENGTH_SHORT).show()
+                        }
+                        else {
+                            favoriteList.add(favoriteList.lastIndex + 1, listedProducts[menuInfo.position])
+                            Toast.makeText(this, "Adaugat la favorite", Toast.LENGTH_SHORT).show()
+                        }
+
+                        //listView.getChildAt(menuInfo.position).setBackgroundColor(ContextCompat.getColor(this, R.color.add_fav))
+                        productAdapter.notifyDataSetChanged()
+                    }
+                    .setNegativeButton(
+                        "NU"
+                    ) { dialog, which ->
+                        Toast.makeText(this, "Renuntat la add fav", Toast.LENGTH_SHORT).show()
+                    }
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show()
             }
+
+             // REMOVE DE LA FAVORITE
             R.id.del_from_fav -> {
-                Toast.makeText(this, "Sters de la favorite", Toast.LENGTH_SHORT).show()
-                return true
+                AlertDialog.Builder(this)
+                    .setTitle("Sterge favorit")
+                    .setMessage("Doriti sa stergeti de la favorite?")
+                    .setPositiveButton(
+                        "DA"
+                    ) { dialog, which ->
+
+                        // daca nu e deja in lista de favorite, nu il pot sterge
+                        if (!favoriteList.contains(listedProducts[menuInfo.position])) {
+                            Toast.makeText(this, "Nu e favorit ca sa il poti sterge", Toast.LENGTH_SHORT).show()
+                        }
+                        else {
+                            // daca e deja in lista de favorite, doar atunci il pot sterge
+
+                            // sterg din lista de favorite, elementul care in lista afisata se gaseste la pozitia meuInfo.position
+                            favoriteList.remove(listedProducts[menuInfo.position])
+
+                            // daca era si in cea cu rosu, si de aici il sterg
+                            if (almostList.contains(listedProducts[menuInfo.position])) {
+                                almostList.remove(listedProducts[menuInfo.position])
+                            }
+                            productAdapter.notifyDataSetChanged()
+                            Toast.makeText(this, "Sters de la favorite", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                    .setNegativeButton(
+                        "NU"
+                    ) { dialog, which ->
+                         // daca nu e deja in lista de favorite, nu pot face actiunea asta
+                        if (!favoriteList.contains(listedProducts[menuInfo.position])) {
+                            Toast.makeText(this, "Nu e favorit ca sa il poti face asta", Toast.LENGTH_SHORT).show()
+                        }
+                        else {
+                            if (!almostList.contains(listedProducts[menuInfo.position])) {
+                                almostList.add(almostList.lastIndex+1, listedProducts[menuInfo.position])
+                                Toast.makeText(this, "Renuntat la delete fav", Toast.LENGTH_SHORT).show()
+                            }
+                            else {
+                                Toast.makeText(this, "E deja cu rosu", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                        productAdapter.notifyDataSetChanged()
+                    }
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show()
             }
+
+            // REMOVE DIN LISTA DE PRODUSE
             R.id.del_item -> {
-                Toast.makeText(this, "Sters", Toast.LENGTH_SHORT).show()
-                return true
+                AlertDialog.Builder(this)
+                    .setTitle("Sterge item")
+                    .setMessage("Doriti sa stergeti itemul?")
+                    .setPositiveButton(
+                        "DA"
+                    ) { dialog, which ->
+                        if (favoriteList.contains(listedProducts[menuInfo.position])) {
+                            favoriteList.remove(listedProducts[menuInfo.position])
+                        }
+                        if (almostList.contains(listedProducts[menuInfo.position])) {
+                            almostList.remove(listedProducts[menuInfo.position])
+                        }
+                        listedProducts.removeAt(menuInfo.position)
+                        productAdapter.notifyDataSetChanged()
+                        Toast.makeText(this, "Sters item", Toast.LENGTH_SHORT).show()
+                    }
+                    .setNegativeButton(
+                        "NU"
+                    ) { dialog, which ->
+                        Toast.makeText(this, "Renuntat la sters item", Toast.LENGTH_SHORT).show()
+                    }
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show()
             }
         }
         return super.onContextItemSelected(item)
     }
 
+    // meniul pentru categorii
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.nav_menu, menu)
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-
-
         when (item.itemId) {
-            R.id.nav_parfum -> {
-                Toast.makeText(this, "Parfumuri", Toast.LENGTH_SHORT).show()
-                currentCategory = "parfum"
+            R.id.nav_foundation -> {
+                Toast.makeText(this, "Foundations", Toast.LENGTH_SHORT).show()
+                currentCategory = "foundation"
             }
-            R.id.nav_ruj -> {
-                Toast.makeText(this, "Rujuri", Toast.LENGTH_SHORT).show()
-                currentCategory = "ruj"
+            R.id.nav_lipstick -> {
+                Toast.makeText(this, "Lipsticks", Toast.LENGTH_SHORT).show()
+                currentCategory = "lipstick"
             }
             R.id.nav_eyeliner -> {
                 Toast.makeText(this, "Eyeline-uri", Toast.LENGTH_SHORT).show()
@@ -122,6 +236,25 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         showProducts(currentCategory)
 
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+        var itemsList = menu.iterator()
+
+        // le fac pe toate neafisate, just in case
+        for (i in itemsList) {
+            i.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
+        }
+
+        itemsList = menu.iterator()
+        // acuma caut itemu cu titlu respectiv selectat, sa il pun ca si curent
+        for (i in itemsList) {
+            if (i.title == currentCategory) {
+                i.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
+            }
+        }
+
+        return super.onPrepareOptionsMenu(menu)
     }
 
     private fun showProducts(category: String) {
@@ -144,25 +277,6 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             productAdapter.notifyDataSetChanged()
             listView.adapter = productAdapter
         }, 3000)
-    }
-
-    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        var itemsList = menu.iterator()
-
-        // le fac pe toate neafisate, just in case
-        for (i in itemsList) {
-            i.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
-        }
-
-        itemsList = menu.iterator()
-        // acuma caut itemu cu titlu respectiv selectat, sa il pun ca si curent
-        for (i in itemsList) {
-            if (i.title == currentCategory) {
-                i.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
-            }
-        }
-
-        return super.onPrepareOptionsMenu(menu)
     }
 
     //

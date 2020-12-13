@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/nav_parfum"
-        android:title="Parfum"
+        android:id="@+id/nav_foundation"
+        android:title="Foundation"
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/nav_ruj"
-        android:title="Ruj"
+        android:id="@+id/nav_lipstick"
+        android:title="Lipstick"
         app:showAsAction="never" />
 
     <item
