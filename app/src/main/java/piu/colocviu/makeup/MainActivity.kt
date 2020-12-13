@@ -46,6 +46,18 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         productList.add(Product("Eyeliner 2", "Brand 2", "Descriere 2", "12.1 lei", "eyeliner", R.drawable.eyeliner_2, android.R.drawable.star_big_on, android.R.drawable.ic_dialog_alert))
         productList.add(Product("Blush 1", "Brand 3", "Descriere 3", "12.1 lei", "blush", R.drawable.blush_1, android.R.drawable.star_big_on, android.R.drawable.ic_dialog_alert))
         productList.add(Product("Blush 2", "Brand 4", "Descriere 4", "12.1 lei", "blush", R.drawable.blush_2, android.R.drawable.star_big_on, android.R.drawable.ic_dialog_alert))
+        productList.add(Product("Blush 3", "Brand 5", "Descriere 5", "12.1 lei", "blush", R.drawable.blush_3, android.R.drawable.star_big_on, android.R.drawable.ic_dialog_alert))
+        productList.add(Product("Blush 4", "Brand 6", "Descriere 6", "12.1 lei", "blush", R.drawable.blush_4, android.R.drawable.star_big_on, android.R.drawable.ic_dialog_alert))
+        productList.add(Product("Lipstick 1", "Brand 7", "Descriere 7", "12.1 lei", "lipstick", R.drawable.lipstick_1, android.R.drawable.star_big_on, android.R.drawable.ic_dialog_alert))
+        productList.add(Product("Lipstick 2", "Brand 8", "Descriere 8", "12.1 lei", "lipstick", R.drawable.lipstick_2, android.R.drawable.star_big_on, android.R.drawable.ic_dialog_alert))
+        productList.add(Product("Lipstick 3", "Brand 9", "Descriere 9", "12.1 lei", "lipstick", R.drawable.lipstick_3, android.R.drawable.star_big_on, android.R.drawable.ic_dialog_alert))
+        productList.add(Product("Lipstick 4", "Brand 10", "Descriere 10", "12.1 lei", "lipstick", R.drawable.lipstick_4, android.R.drawable.star_big_on, android.R.drawable.ic_dialog_alert))
+        productList.add(Product("Foundation 1", "Brand 11", "Descriere 11", "12.1 lei", "foundation", R.drawable.foundation_1, android.R.drawable.star_big_on, android.R.drawable.ic_dialog_alert))
+        productList.add(Product("Foundation 2", "Brand 12", "Descriere 12", "12.1 lei", "foundation", R.drawable.foundation_2, android.R.drawable.star_big_on, android.R.drawable.ic_dialog_alert))
+        productList.add(Product("Foundation 3", "Brand 13", "Descriere 13", "12.1 lei", "foundation", R.drawable.foundation_3, android.R.drawable.star_big_on, android.R.drawable.ic_dialog_alert))
+        productList.add(Product("Foundation 4", "Brand 14", "Descriere 14", "12.1 lei", "foundation", R.drawable.foundation_4, android.R.drawable.star_big_on, android.R.drawable.ic_dialog_alert))
+        productList.add(Product("Eyeliner 3", "Brand 15", "Descriere 15", "12.1 lei", "eyeliner", R.drawable.eyeliner_3, android.R.drawable.star_big_on, android.R.drawable.ic_dialog_alert))
+        productList.add(Product("Eyeliner 4", "Brand 16", "Descriere 16", "12.1 lei", "eyeliner", R.drawable.eyeliner_4, android.R.drawable.star_big_on, android.R.drawable.ic_dialog_alert))
 
         productAdapter = ProductAdapter(applicationContext, listedProducts, favoriteList, almostList)
         listView.adapter = productAdapter
@@ -201,13 +213,13 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.nav_parfum -> {
-                Toast.makeText(this, "Parfumuri", Toast.LENGTH_SHORT).show()
-                currentCategory = "parfum"
+            R.id.nav_foundation -> {
+                Toast.makeText(this, "Foundations", Toast.LENGTH_SHORT).show()
+                currentCategory = "foundation"
             }
-            R.id.nav_ruj -> {
-                Toast.makeText(this, "Rujuri", Toast.LENGTH_SHORT).show()
-                currentCategory = "ruj"
+            R.id.nav_lipstick -> {
+                Toast.makeText(this, "Lipsticks", Toast.LENGTH_SHORT).show()
+                currentCategory = "lipstick"
             }
             R.id.nav_eyeliner -> {
                 Toast.makeText(this, "Eyeline-uri", Toast.LENGTH_SHORT).show()
