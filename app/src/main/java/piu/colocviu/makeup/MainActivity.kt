@@ -97,6 +97,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
+
         when (item.itemId) {
             R.id.nav_parfum -> {
                 Toast.makeText(this, "Parfumuri", Toast.LENGTH_SHORT).show()
