@@ -26,6 +26,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     var currentCategory = "none"
     val productList: ArrayList<Product> = ArrayList()
     var favoriteList: ArrayList<Product> = ArrayList()
+    var almostList: ArrayList<Product> = ArrayList()
     val listedProducts: ArrayList<Product> = ArrayList()
     lateinit var productAdapter: ProductAdapter
 
@@ -41,12 +42,12 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
         val listView = findViewById<ListView>(R.id.listView)
 
-        productList.add(Product("Eyeliner 1", "Brand 1", "Descriere 1", "12.1 lei", "eyeliner", R.drawable.eyeliner_1, android.R.drawable.star_big_on))
-        productList.add(Product("Eyeliner 2", "Brand 2", "Descriere 2", "12.1 lei", "eyeliner", R.drawable.eyeliner_2, android.R.drawable.star_big_on))
-        productList.add(Product("Blush 1", "Brand 3", "Descriere 3", "12.1 lei", "blush", R.drawable.blush_1, android.R.drawable.star_big_on))
-        productList.add(Product("Blush 2", "Brand 4", "Descriere 4", "12.1 lei", "blush", R.drawable.blush_2, android.R.drawable.star_big_on))
+        productList.add(Product("Eyeliner 1", "Brand 1", "Descriere 1", "12.1 lei", "eyeliner", R.drawable.eyeliner_1, android.R.drawable.star_big_on, android.R.drawable.ic_dialog_alert))
+        productList.add(Product("Eyeliner 2", "Brand 2", "Descriere 2", "12.1 lei", "eyeliner", R.drawable.eyeliner_2, android.R.drawable.star_big_on, android.R.drawable.ic_dialog_alert))
+        productList.add(Product("Blush 1", "Brand 3", "Descriere 3", "12.1 lei", "blush", R.drawable.blush_1, android.R.drawable.star_big_on, android.R.drawable.ic_dialog_alert))
+        productList.add(Product("Blush 2", "Brand 4", "Descriere 4", "12.1 lei", "blush", R.drawable.blush_2, android.R.drawable.star_big_on, android.R.drawable.ic_dialog_alert))
 
-        productAdapter = ProductAdapter(applicationContext, listedProducts, favoriteList)
+        productAdapter = ProductAdapter(applicationContext, listedProducts, favoriteList, almostList)
         listView.adapter = productAdapter
 
         // functionalitatea de long press, ca sa stergem un element
@@ -91,19 +92,18 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                     .setPositiveButton(
                         "DA"
                     ) { dialog, which ->
-                        // adaug la final in lista de favorite, elementul care in lista principala se gaseste la pozitia meuInfo.position
+                        // adaug la final in lista de favorite, elementul care in lista afisata se gaseste la pozitia meuInfo.position
 
-                        if (favoriteList.size == 0) {
-                            favoriteList.add(0, listedProducts[menuInfo.position])
+                        if (favoriteList.contains(listedProducts[menuInfo.position])) {
+                            Toast.makeText(this, "Exista deja la favorite", Toast.LENGTH_SHORT).show()
                         }
                         else {
-                            Log.d("CREATION", "\n\n\n\nULTIMU INDEX: " + favoriteList.lastIndex.toString())
-                            favoriteList.add(favoriteList.lastIndex+1, listedProducts[menuInfo.position])
+                            favoriteList.add(favoriteList.lastIndex + 1, listedProducts[menuInfo.position])
+                            Toast.makeText(this, "Adaugat la favorite", Toast.LENGTH_SHORT).show()
                         }
 
                         //listView.getChildAt(menuInfo.position).setBackgroundColor(ContextCompat.getColor(this, R.color.add_fav))
                         productAdapter.notifyDataSetChanged()
-                        Toast.makeText(this, "Adaugat la favorite", Toast.LENGTH_SHORT).show()
                     }
                     .setNegativeButton(
                         "NU"
@@ -122,18 +122,42 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                     .setPositiveButton(
                         "DA"
                     ) { dialog, which ->
-                        // sterg din lista de favorite, elementul care in lista principala se gaseste la pozitia meuInfo.position
-                        favoriteList.remove(listedProducts[menuInfo.position])
-                        listView.getChildAt(menuInfo.position).setBackgroundColor(ContextCompat.getColor(this, R.color.delete_fav))
-                        var x = findViewById<ImageView>(R.id.iconita_fav)
-                        x.setImageResource(android.R.drawable.ic_menu_close_clear_cancel)
-                        productAdapter.notifyDataSetChanged()
-                        Toast.makeText(this, "Sters de la favorite", Toast.LENGTH_SHORT).show()
+
+                        // daca nu e deja in lista de favorite, nu il pot sterge
+                        if (!favoriteList.contains(listedProducts[menuInfo.position])) {
+                            Toast.makeText(this, "Nu e favorit ca sa il poti sterge", Toast.LENGTH_SHORT).show()
+                        }
+                        else {
+                            // daca e deja in lista de favorite, doar atunci il pot sterge
+
+                            // sterg din lista de favorite, elementul care in lista afisata se gaseste la pozitia meuInfo.position
+                            favoriteList.remove(listedProducts[menuInfo.position])
+
+                            // daca era si in cea cu rosu, si de aici il sterg
+                            if (almostList.contains(listedProducts[menuInfo.position])) {
+                                almostList.remove(listedProducts[menuInfo.position])
+                            }
+                            productAdapter.notifyDataSetChanged()
+                            Toast.makeText(this, "Sters de la favorite", Toast.LENGTH_SHORT).show()
+                        }
                     }
                     .setNegativeButton(
                         "NU"
                     ) { dialog, which ->
-                        Toast.makeText(this, "Renuntat la delete fav", Toast.LENGTH_SHORT).show()
+                         // daca nu e deja in lista de favorite, nu pot face actiunea asta
+                        if (!favoriteList.contains(listedProducts[menuInfo.position])) {
+                            Toast.makeText(this, "Nu e favorit ca sa il poti face asta", Toast.LENGTH_SHORT).show()
+                        }
+                        else {
+                            if (!almostList.contains(listedProducts[menuInfo.position])) {
+                                almostList.add(almostList.lastIndex+1, listedProducts[menuInfo.position])
+                                Toast.makeText(this, "Renuntat la delete fav", Toast.LENGTH_SHORT).show()
+                            }
+                            else {
+                                Toast.makeText(this, "E deja cu rosu", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                        productAdapter.notifyDataSetChanged()
                     }
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .show()
@@ -147,8 +171,13 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                     .setPositiveButton(
                         "DA"
                     ) { dialog, which ->
+                        if (favoriteList.contains(listedProducts[menuInfo.position])) {
+                            favoriteList.remove(listedProducts[menuInfo.position])
+                        }
+                        if (almostList.contains(listedProducts[menuInfo.position])) {
+                            almostList.remove(listedProducts[menuInfo.position])
+                        }
                         listedProducts.removeAt(menuInfo.position)
-                        productList.removeAt(menuInfo.position)
                         productAdapter.notifyDataSetChanged()
                         Toast.makeText(this, "Sters item", Toast.LENGTH_SHORT).show()
                     }

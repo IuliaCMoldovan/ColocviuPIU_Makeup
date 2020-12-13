@@ -9,6 +9,7 @@ data class Product(
     var pret: String,
     var categorie: String,
     var imagine: Int,
-    var iconita_fav: Int
+    var iconita_stea: Int,
+    var iconita_x: Int
 
 ) : Serializable

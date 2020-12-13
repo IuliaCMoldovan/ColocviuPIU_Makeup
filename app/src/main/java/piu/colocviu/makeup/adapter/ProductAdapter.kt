@@ -12,7 +12,7 @@ import androidx.core.content.ContextCompat
 import piu.colocviu.makeup.R
 import piu.colocviu.makeup.model.Product
 
-class ProductAdapter(var context: Context, var products: ArrayList<Product>, var favorites: ArrayList<Product>) : BaseAdapter() {
+class ProductAdapter(var context: Context, var products: ArrayList<Product>, var favorites: ArrayList<Product>, var almosts: ArrayList<Product>) : BaseAdapter() {
 
     private class ViewHolder(row: View?) {
         var nume: TextView = row?.findViewById(R.id.nume) as TextView
@@ -21,7 +21,8 @@ class ProductAdapter(var context: Context, var products: ArrayList<Product>, var
         var pret: TextView = row?.findViewById(R.id.pret) as TextView
         var categorie: TextView = row?.findViewById(R.id.categorie) as TextView
         var imagine: ImageView = row?.findViewById(R.id.imagine) as ImageView
-        var iconita_fav: ImageView = row?.findViewById(R.id.iconita_fav) as ImageView
+        var iconita_stea: ImageView = row?.findViewById(R.id.iconita_stea) as ImageView
+        var iconita_x: ImageView = row?.findViewById(R.id.iconita_x) as ImageView
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
@@ -35,8 +36,21 @@ class ProductAdapter(var context: Context, var products: ArrayList<Product>, var
             val layout = LayoutInflater.from(context)
             view = layout.inflate(R.layout.product_list, parent, false)
 
-            if (favorites.contains(produs)) {
-                view.setBackgroundColor(ContextCompat.getColor(context, R.color.add_fav))
+            if (almosts.contains(produs)) {
+                if (favorites.contains(produs)) {
+                    view.setBackgroundColor(ContextCompat.getColor(context, R.color.delete_fav))
+                }
+                else {
+                    view.setBackgroundColor(ContextCompat.getColor(context, R.color.white))
+                }
+            }
+            else {
+                if (favorites.contains(produs)) {
+                    view.setBackgroundColor(ContextCompat.getColor(context, R.color.add_fav))
+                }
+                else {
+                    view.setBackgroundColor(ContextCompat.getColor(context, R.color.white))
+                }
             }
 
             viewHolder = ViewHolder(view)
@@ -44,8 +58,22 @@ class ProductAdapter(var context: Context, var products: ArrayList<Product>, var
         } else {
             // daca am deja, atunci doar fac corespondenta intre tag
             view = convertView
-            if (favorites.contains(produs)) {
-                view.setBackgroundColor(ContextCompat.getColor(context, R.color.add_fav))
+
+            if (almosts.contains(produs)) {
+                if (favorites.contains(produs)) {
+                    view.setBackgroundColor(ContextCompat.getColor(context, R.color.delete_fav))
+                }
+                else {
+                    view.setBackgroundColor(ContextCompat.getColor(context, R.color.white))
+                }
+            }
+            else {
+                if (favorites.contains(produs)) {
+                    view.setBackgroundColor(ContextCompat.getColor(context, R.color.add_fav))
+                }
+                else {
+                    view.setBackgroundColor(ContextCompat.getColor(context, R.color.white))
+                }
             }
             viewHolder = view.tag as ViewHolder
         }
@@ -57,13 +85,22 @@ class ProductAdapter(var context: Context, var products: ArrayList<Product>, var
         viewHolder.pret.text = produs.pret
         viewHolder.categorie.text = produs.categorie
         viewHolder.imagine.setImageResource(produs.imagine)
-        viewHolder.iconita_fav.setImageResource(produs.iconita_fav)
+        viewHolder.iconita_stea.setImageResource(produs.iconita_stea)
+        viewHolder.iconita_x.setImageResource(produs.iconita_x)
 
-        if (favorites.contains(produs)) {
-            viewHolder.iconita_fav.visibility = View.VISIBLE
+        if (favorites.contains(produs) && almosts.contains(produs)) {
+            viewHolder.iconita_stea.visibility = View.GONE
+            viewHolder.iconita_x.visibility = View.VISIBLE
         }
-        else {
-            viewHolder.iconita_fav.visibility = View.GONE
+
+        if (favorites.contains(produs) && !almosts.contains(produs)) {
+            viewHolder.iconita_stea.visibility = View.VISIBLE
+            viewHolder.iconita_x.visibility = View.GONE
+        }
+
+        if (!favorites.contains(produs) && !almosts.contains(produs)) {
+            viewHolder.iconita_stea.visibility = View.GONE
+            viewHolder.iconita_x.visibility = View.GONE
         }
 
         return view as View
